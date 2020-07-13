@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { getComments } from "../redux/actions/dataActions";
 
 import moment from "moment";
+import CommentForm from "./CommentForm";
 // import dayjs from "dayjs";
 
 class Post extends Component {
@@ -66,13 +67,7 @@ class Post extends Component {
         {/* comments */}
         <hr className="mt-4" />
         <div className="comments">
-          <form action="">
-            <input
-              type="text"
-              placeholder="Add comment"
-              className="form-control"
-            />
-          </form>
+          <CommentForm id={this.props.post.id} />
         </div>
       </div>
     );

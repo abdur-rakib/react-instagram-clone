@@ -17,6 +17,8 @@ class Posts extends Component {
         <div className="col-md-12 mx-auto loading">
           <ClockLoader size={150} color="orange" />
         </div>
+      ) : posts.length === 0 ? (
+        <h1 className="display-5 mt-4 mb-2 text-center">No posts yet !!!</h1>
       ) : (
         posts.map((post) => <Post key={post.id} post={post} />)
       );

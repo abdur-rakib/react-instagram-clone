@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { storage, db } from "../../firebase/utils";
-import firebase from "firebase/app";
 import { connect } from "react-redux";
 
 const initState = {
@@ -50,7 +49,7 @@ class ImageUpload extends Component {
           .getDownloadURL()
           .then((url) => {
             return db.collection("posts").add({
-              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              createdAt: new Date().toISOString(),
               caption: this.state.caption,
               imageUrl: url,
               username: this.props.user.displayName,
