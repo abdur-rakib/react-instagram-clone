@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { storage, db } from "../../firebase/utils";
+// import firebase from "firebase/app";
 import { connect } from "react-redux";
 
 const initState = {

@@ -29,7 +29,7 @@ export const getComments = (postId) => (dispatch) => {
     .onSnapshot((snapshot) => {
       let comments = [];
       snapshot.docs.map((doc) => comments.push(doc.data()));
-      // console.log(comments);
+      console.log(comments);
       dispatch({ type: SET_COMMENTS, payload: comments });
     });
 };

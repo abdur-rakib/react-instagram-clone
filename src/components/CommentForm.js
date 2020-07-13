@@ -22,14 +22,16 @@ const CommentForm = (props) => {
   //   console.log(props.id);
   return (
     <>
-      <form action="" onSubmit={handleSubmit}>
+      <form action="" onSubmit={handleSubmit} className="d-flex">
         <input
           type="text"
           placeholder="Add comment"
           className="form-control"
           value={comment}
           onChange={handleChangle}
+          required
         />
+        <button className="btn btn-md border">Comment</button>
       </form>
     </>
   );
