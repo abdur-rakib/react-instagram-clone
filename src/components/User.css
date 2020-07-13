@@ -1,0 +1,21 @@
+.user {
+  margin: 25px auto;
+  margin-left: 0;
+  border: 1px solid lightgray;
+  padding-top: 20px;
+  height: 400px;
+}
+
+.user__header {
+  padding-left: 20px;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+}
+
+.user__avatar {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}

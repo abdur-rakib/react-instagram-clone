@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  font-weight: 500;
+  font-family: "Inter", sans-serif !important;
+}
+
+.app {
+  background-color: #fafafa;
+  min-height: 100vh;
+}
+
+.row {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+.uesr_pos {
+  border: 1px solid red;
+}
+
+@media screen and (min-width: 900px) {
+  .user_pos {
+    position: fixed;
+    left: 90px;
+  }
+}
+
+progress {
+  height: 15px;
+  border-radius: 3px;
+}
+progress[value]::-webkit-progress-bar {
+  background-color: #eee;
+  border-radius: 3px;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+.loading {
+  position: relative;
+  top: 20%;
+  left: 30%;
+  margin-bottom: 40px;
+}

@@ -1,0 +1,38 @@
+.auth-form {
+  border: 1px solid lightgray;
+  padding: 30px 60px !important;
+  margin: 30px;
+  background-color: white;
+  border-radius: 3px;
+}
+
+.form-control {
+  background-color: #fafafa !important;
+  padding: 10px !important;
+}
+
+.form-control::placeholder {
+  margin-left: 50px;
+}
+
+.signup__image {
+  height: 40px;
+}
+
+.btn-primary {
+  font-size: 1.4rem !important;
+}
+
+.line {
+  display: flex;
+  align-items: center;
+}
+.single-line {
+  background-color: rgba(0, 0, 0, 0.377);
+  height: 1px;
+  width: 100%;
+}
+
+.or {
+  margin: 10px;
+}

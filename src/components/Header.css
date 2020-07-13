@@ -1,0 +1,17 @@
+/* Main Header */
+.app__header {
+  background-color: white;
+  padding: 15px 15px 5px 0;
+  border-bottom: 1px solid #dbdbdb;
+  object-fit: contain;
+}
+
+.header {
+  margin-left: 0 !important;
+}
+
+.profile {
+  position: relative;
+  top: -6px;
+  box-shadow: none;
+}
