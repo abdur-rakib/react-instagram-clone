@@ -9,6 +9,7 @@ import Recovery from "./components/Recovery";
 import { auth } from "./firebase/utils";
 import { CREATE_USER } from "./redux/types";
 import Profile from "./Profile/Profile";
+import SinglePost from "./components/SinglePost/SinglePost";
 
 class App extends Component {
   state = {
@@ -65,6 +66,7 @@ class App extends Component {
               }
             />
             <Route exact path="/reset" component={Recovery} />
+            <Route exact patch="/post/:id" component={SinglePost} />
           </BrowserRouter>
         </div>
       </Provider>

@@ -14,7 +14,7 @@ class Posts extends Component {
     const { posts } = this.props.data;
     const renderPosts =
       posts === null ? (
-        <div className="col-md-12 mx-auto loading">
+        <div className="col-md-12 mx-auto pt-5 mt-5 loading">
           <ClockLoader size={150} color="orange" />
         </div>
       ) : posts.length === 0 ? (

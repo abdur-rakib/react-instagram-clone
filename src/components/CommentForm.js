@@ -10,7 +10,6 @@ const CommentForm = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Comment Submitted");
     props.postComment(props.id, {
       comment: comment,
       username: props.user.displayName,

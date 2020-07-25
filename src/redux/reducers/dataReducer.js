@@ -1,4 +1,4 @@
-import { SET_POSTS, SET_COMMENTS } from "../types";
+import { SET_POSTS, SET_COMMENTS, SET_POST } from "../types";
 
 const initState = {
   posts: null,
@@ -12,6 +12,11 @@ export default function (state = initState, action) {
       return {
         ...state,
         posts: action.payload,
+      };
+    case SET_POST:
+      return {
+        ...state,
+        post: action.payload,
       };
     case SET_COMMENTS:
       // console.log(action.payload);

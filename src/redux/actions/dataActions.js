@@ -1,5 +1,5 @@
 import { db } from "../../firebase/utils";
-import { SET_POSTS, SET_COMMENTS } from "../types";
+import { SET_POSTS, SET_COMMENTS, SET_POST } from "../types";
 // import firebase from "firebase/app";
 
 export const getPosts = () => (dispatch) => {
@@ -40,5 +40,16 @@ export const postComment = (id, commentData) => (dispatch) => {
     comment: commentData.comment,
     username: commentData.username,
     createdAt: new Date().toISOString(),
+  });
+};
+
+// get single post
+export const getSinglePost = (id) => (dispatch) => {
+  db.collection("posts").onSnapshot((snapshot) => {
+    snapshot.docs.find((doc) => {
+      if (doc.id === id) {
+        dispatch({ type: SET_POST, payload: doc.data() });
+      }
+    });
   });
 };

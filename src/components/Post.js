@@ -4,9 +4,11 @@ import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { connect } from "react-redux";
 import { getComments } from "../redux/actions/dataActions";
 import { db } from "../firebase/utils";
+import { MdFiberManualRecord } from "react-icons/md";
 
 import moment from "moment";
 import CommentForm from "./CommentForm";
+import { Link } from "react-router-dom";
 // import dayjs from "dayjs";
 
 class Post extends Component {
@@ -14,10 +16,6 @@ class Post extends Component {
     comments: [],
   };
   componentDidMount() {
-    // console.log(this.props.post.id);
-    // if (this.props.post.id) {
-    //   this.props.getComments(this.props.post.id);
-    // }
     db.collection("posts")
       .doc(this.props.post.id)
       .collection("comments")
@@ -26,13 +24,11 @@ class Post extends Component {
         let comments = [];
         snapshot.docs.map((doc) => comments.push(doc.data()));
 
-        setTimeout(() => console.log(comments), 5000);
-        // dispatch({ type: SET_COMMENTS, payload: comments });
         this.setState({ comments: comments });
       });
   }
   render() {
-    const { username, caption, imageUrl, createdAt } = this.props.post;
+    const { id, username, caption, imageUrl, createdAt } = this.props.post;
     const { comments } = this.state;
     // console.log(this.props.post.id, comments);
     const renderComments =
@@ -41,7 +37,11 @@ class Post extends Component {
       ) : (
         <>
           {comments.length > 3 ? (
-            <p className="text-primary">View all {comments.length} comments</p>
+            <Link to={`/post/${id}`}>
+              <p className="text-primary">
+                View all {comments.length} comments
+              </p>
+            </Link>
           ) : (
             <p></p>
           )}
@@ -78,6 +78,7 @@ class Post extends Component {
           </p>
           {/* Username + caption */}
           <p className="post__text mb-0">
+            <MdFiberManualRecord color="orangered" className="mt-0 mb-1" />
             <strong>{username}</strong> {caption}
           </p>
           {renderComments}
