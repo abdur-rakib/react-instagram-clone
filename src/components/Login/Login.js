@@ -25,6 +25,7 @@ class Login extends Component {
   }
   render() {
     const { error } = this.props.user;
+    const { loading } = this.props.ui;
     return (
       <div className="row d-flex flex-column">
         <div className="col-sm-5 mx-auto auth-form text-center mb-0">
@@ -55,7 +56,12 @@ class Login extends Component {
               required
               onChange={this.handleChange}
             />
-            <button className="btn btn-block btn-primary my-3">Log in</button>
+            <button
+              className="btn btn-block btn-primary my-3"
+              disabled={loading}
+            >
+              {loading ? "Logging in" : "Log in"}
+            </button>
           </form>
 
           <div className="line mb-2">
@@ -89,6 +95,7 @@ class Login extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    ui: state.ui,
   };
 };
 const mapActionsToProps = {

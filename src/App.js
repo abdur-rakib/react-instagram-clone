@@ -66,7 +66,7 @@ class App extends Component {
               }
             />
             <Route exact path="/reset" component={Recovery} />
-            <Route exact patch="/post/:id" component={SinglePost} />
+            <Route exact path="/post/:id" component={SinglePost} />
           </BrowserRouter>
         </div>
       </Provider>

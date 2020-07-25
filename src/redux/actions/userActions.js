@@ -1,8 +1,16 @@
 import { auth } from "../../firebase/utils";
-import { CREATE_USER, LOGOUT_USER, SET_ERROR, CLEAR_ERROR } from "../types";
+import {
+  CREATE_USER,
+  LOGOUT_USER,
+  SET_ERROR,
+  CLEAR_ERROR,
+  SET_LOADING,
+  CLEAR_LOADING,
+} from "../types";
 
 export const signUpWithEmailPassword = (newUserData) => (dispatch) => {
   dispatch({ type: CLEAR_ERROR });
+  dispatch({ type: SET_LOADING });
   auth
     .createUserWithEmailAndPassword(newUserData.email, newUserData.password)
     .then((res) => {
@@ -11,7 +19,6 @@ export const signUpWithEmailPassword = (newUserData) => (dispatch) => {
           displayName: newUserData.username,
         })
         .then(() => {
-          console.log(res.user);
           dispatch({
             type: CREATE_USER,
             payload: {
@@ -19,14 +26,19 @@ export const signUpWithEmailPassword = (newUserData) => (dispatch) => {
               displayName: res.user.displayName,
             },
           });
+          dispatch({ type: CLEAR_LOADING });
         });
     })
-    .catch((err) => dispatch({ type: SET_ERROR, payload: err.message }));
+    .catch((err) => {
+      dispatch({ type: SET_ERROR, payload: err.message });
+      dispatch({ type: CLEAR_LOADING });
+    });
 };
 
 // login
 export const signinWithEmail = (userData) => (dispatch) => {
   dispatch({ type: CLEAR_ERROR });
+  dispatch({ type: SET_LOADING });
   auth
     .signInWithEmailAndPassword(userData.email, userData.password)
     .then((res) => {
@@ -34,8 +46,12 @@ export const signinWithEmail = (userData) => (dispatch) => {
         type: CREATE_USER,
         payload: { email: res.user.email, displayName: res.user.displayName },
       });
+      dispatch({ type: CLEAR_LOADING });
     })
-    .catch((err) => dispatch({ type: SET_ERROR, payload: err.message }));
+    .catch((err) => {
+      dispatch({ type: SET_ERROR, payload: err.message });
+      dispatch({ type: CLEAR_LOADING });
+    });
 };
 
 // logout

@@ -28,7 +28,7 @@ const SinglePost = (props) => {
       props.getSinglePost(postId);
       props.getComments(postId);
     }
-  }, [postId]);
+  }, [postId, props]);
 
   //   const { username, caption, imageUrl, createdAt } = props.data.post;
   const { comments } = props.data;
@@ -46,8 +46,8 @@ const SinglePost = (props) => {
     );
   const renderPost =
     props.post === null ? (
-      <div className="col-md-12 mx-auto loading">
-        {/* <ClockLoader size={150} color="orange" /> */}
+      <div className="col-md-12 mt-5 pt-5 mx-auto loading">
+        <ClockLoader size={150} color="orange" />
       </div>
     ) : (
       <div className="post">

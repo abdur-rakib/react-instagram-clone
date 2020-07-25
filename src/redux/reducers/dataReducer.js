@@ -25,8 +25,6 @@ export default function (state = initState, action) {
         comments: action.payload,
       };
     default:
-      return {
-        ...state,
-      };
+      return state;
   }
 }

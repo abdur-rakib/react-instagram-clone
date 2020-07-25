@@ -21,7 +21,6 @@ class Signup extends Component {
   };
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Sign up clicked");
     this.props.signUpWithEmailPassword(this.state);
   };
   componentWillUnmount() {
@@ -30,6 +29,8 @@ class Signup extends Component {
   render() {
     const { email, username, password } = this.state;
     const { error } = this.props.user;
+    const { loading } = this.props.ui;
+    console.log(loading);
     return (
       <div className="row  d-flex flex-column">
         <div className="col-sm-5 mx-auto auth-form text-center mb-0">
@@ -81,7 +82,12 @@ class Signup extends Component {
               value={password}
               required
             />
-            <button className="btn btn-block btn-primary my-3">Sign up</button>
+            <button
+              className="btn btn-block btn-primary my-3"
+              disabled={loading}
+            >
+              {loading ? "Signing up" : "Sign up"}
+            </button>
           </form>
           <div className="footer__text mt-4">
             <p className="lead">
@@ -103,6 +109,7 @@ class Signup extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    ui: state.ui,
   };
 };
 

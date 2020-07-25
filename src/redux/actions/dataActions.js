@@ -46,6 +46,7 @@ export const postComment = (id, commentData) => (dispatch) => {
 // get single post
 export const getSinglePost = (id) => (dispatch) => {
   db.collection("posts").onSnapshot((snapshot) => {
+    // eslint-disable-next-line
     snapshot.docs.find((doc) => {
       if (doc.id === id) {
         dispatch({ type: SET_POST, payload: doc.data() });

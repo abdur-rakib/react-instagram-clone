@@ -3,7 +3,7 @@ import Post from "./Post";
 import { connect } from "react-redux";
 
 import { getPosts } from "../redux/actions/dataActions";
-import { ClockLoader } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 
 class Posts extends Component {
   componentDidMount() {
@@ -15,7 +15,7 @@ class Posts extends Component {
     const renderPosts =
       posts === null ? (
         <div className="col-md-12 mx-auto pt-5 mt-5 loading">
-          <ClockLoader size={150} color="orange" />
+          <BeatLoader size={50} color="#007BFF" />
         </div>
       ) : posts.length === 0 ? (
         <h1 className="display-5 mt-4 mb-2 text-center">No posts yet !!!</h1>
