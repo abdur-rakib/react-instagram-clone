@@ -16,7 +16,7 @@ export const signUpWithEmailPassword = (newUserData) => (dispatch) => {
     .then((res) => {
       db.doc(`users/${res.user.uid}`)
         .set({
-          name: newUserData.username,
+          name: newUserData.name,
           address: "",
           bio: "",
           website: "",
@@ -26,7 +26,7 @@ export const signUpWithEmailPassword = (newUserData) => (dispatch) => {
             type: CREATE_USER,
             payload: {
               uid: res.user.uid,
-              name: newUserData.username,
+              name: newUserData.name,
               address: "",
               bio: "",
               website: "",

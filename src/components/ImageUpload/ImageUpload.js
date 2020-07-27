@@ -57,6 +57,7 @@ class ImageUpload extends Component {
               caption: this.state.caption,
               imageUrl: url,
               username: this.props.user.name,
+              uid: this.props.user.uid,
               likeCount: 0,
             });
           })

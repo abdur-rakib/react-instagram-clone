@@ -5,7 +5,14 @@ import { connect } from "react-redux";
 import { FcInfo, FcAddressBook } from "react-icons/fc";
 import { FiExternalLink } from "react-icons/fi";
 import { Modal } from "react-bootstrap";
-import {editUserDetails} from "../redux/actions/userActions"
+import { editUserDetails } from "../redux/actions/userActions";
+import { getUserPosts } from "../redux/actions/dataActions";
+import { BeatLoader } from "react-spinners";
+import Post from "../components/Post";
+
+// import { auth, db } from "../firebase/utils";
+// import { CREATE_USER } from "../redux/types";
+// import store from "../redux/store";
 
 class Profile extends Component {
   state = {
@@ -27,22 +34,39 @@ class Profile extends Component {
       name: this.state.name,
       bio: this.state.bio,
       website: this.state.website,
-      address: this.state.address
-    }
-    this.props.editUserDetails(newUserData, this.props.user.uid)
-    this.setState({show: this.props.ui.loading})
+      address: this.state.address,
+    };
+    this.props.editUserDetails(newUserData, this.props.user.uid);
+    this.setState({ show: this.props.ui.loading });
   };
 
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   return {
-  //     name: nextProps.user.name,
-  //     bio: nextProps.user.bio,
-  //     website: nextProps.user.website,
-  //     address: nextProps.user.address,
-  //   };
-  // }
+  componentDidUpdate() {
+    this.props.getUserPosts(this.props.user.uid);
+  }
+
   componentDidMount() {
+    this.props.getUserPosts(this.props.user.uid);
     this.mapUserDetailsToState(this.props.user);
+
+    // auth.onAuthStateChanged((userAuth) => {
+    //   if (userAuth) {
+    //     db.doc(`users/${userAuth.uid}`)
+    //       .get()
+    //       .then((doc) => {
+    //         // console.log(doc.data())
+    //         store.dispatch({
+    //           type: CREATE_USER,
+    //           payload: {
+    //             uid: userAuth.uid,
+    //             name: doc.data().name,
+    //             bio: doc.data().bio,
+    //             address: doc.data().address,
+    //             website: doc.data().website,
+    //           },
+    //         });
+    //       });
+    //   }
+    // });
   }
   mapUserDetailsToState = (user) => {
     this.setState({
@@ -53,9 +77,21 @@ class Profile extends Component {
     });
   };
   render() {
+    const { loading } = this.props.ui;
+    const { userPosts } = this.props.data;
+    const renderPosts =
+      userPosts === null ? (
+        <div className="col-md-12 mx-auto pt-5 mt-5 loading">
+          <BeatLoader size={50} color="#007BFF" />
+        </div>
+      ) : userPosts.length === 0 ? (
+        <h1 className="display-5 mt-4 mb-2 text-center">No posts yet !!!</h1>
+      ) : (
+        userPosts.map((post) => <Post key={post.id} post={post} />)
+      );
     let renderCategory;
     if (this.state.category === "yourPosts") {
-      renderCategory = <h1>Your Posts</h1>;
+      renderCategory = <div className="col-md-10 mx-auto">{renderPosts}</div>;
     }
     if (this.state.category === "yourSavedPosts") {
       renderCategory = <h1>Your Saved Posts</h1>;
@@ -64,7 +100,6 @@ class Profile extends Component {
       renderCategory = <h1>Your Liked Posts</h1>;
     }
 
-    const { loading } = this.props.ui;
     return (
       <>
         <Modal
@@ -73,7 +108,7 @@ class Profile extends Component {
           onHide={() => this.setState({ show: false })}
           centered
         >
-          <Modal.Header >
+          <Modal.Header>
             <Modal.Title id="example-modal-sizes-title-sm">
               Edit Profile
             </Modal.Title>
@@ -125,17 +160,17 @@ class Profile extends Component {
           </Modal.Body>
         </Modal>
         <Header />
-        <div className="row mt-5 d-flex justify-content-center align-items-center">
-          <div className="col-sm-3">
-            <div className="profile__image mx-auto">
+        <div className="row mt-5 d-flex justify-content-center">
+          <div className="col-sm-3  text-center">
+            <div className=" mx-auto">
               <img
-                className="img-fluid rounded-circle w-75 mx-auto"
+                className="profile__image rounded-circle mx-auto"
                 src="https://www.w3schools.com/howto/img_avatar.png"
                 alt="avatar"
               />
             </div>
           </div>
-          <div className="col-sm-5 mt-md-0 mt-5">
+          <div className="col-sm-5 mt-md-0 ml-5 mt-5">
             <div className="profile__details">
               <div className="username d-flex align-items-center">
                 <h2 className="mb-0">{this.props.user.name}</h2>
@@ -165,28 +200,28 @@ class Profile extends Component {
               </div>
               <div className="profile__bio">
                 <p className="h4 mt-4 font-weight-light">
-                    <FcInfo className="mr-2" style={{ fontSize: "1.6rem" }} />
-                  <span className="font-weight-bold r">
-                    Bio:
-                  </span>{" "}
+                  <FcInfo className="mr-2" style={{ fontSize: "1.6rem" }} />
+                  <span className="font-weight-bold r">Bio:</span>{" "}
                   {this.props.user.bio}
                 </p>
               </div>
               <div className="profile__address">
                 <p className="h4 mt-4 font-weight-light">
-                    <FcAddressBook className="mr-2" style={{ fontSize: "1.6rem" }} />
-                  <span className="font-weight-bold">
-                    Address:
-                  </span>{" "}
+                  <FcAddressBook
+                    className="mr-2"
+                    style={{ fontSize: "1.6rem" }}
+                  />
+                  <span className="font-weight-bold">Address:</span>{" "}
                   {this.props.user.address}
                 </p>
               </div>
               <div className="profile__website">
                 <p className="h4 mt-4 font-weight-light">
-                    <FiExternalLink className="mr-2" style={{ fontSize: "1.6rem" }} />
-                  <span className="font-weight-bold">
-                    Website:
-                  </span>{" "}
+                  <FiExternalLink
+                    className="mr-2"
+                    style={{ fontSize: "1.6rem" }}
+                  />
+                  <span className="font-weight-bold">Website:</span>{" "}
                   {this.props.user.website}
                 </p>
               </div>
@@ -254,11 +289,13 @@ const mapStateToProps = (state) => {
   return {
     user: state.user,
     ui: state.ui,
+    data: state.data,
   };
 };
 
 const mapActionsToProps = {
-  editUserDetails
+  editUserDetails,
+  getUserPosts,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Profile);

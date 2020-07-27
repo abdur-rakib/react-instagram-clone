@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 class Signup extends Component {
   state = {
     email: "",
-    username: "",
+    name: "",
     password: "",
   };
 
@@ -27,7 +27,7 @@ class Signup extends Component {
     this.props.clearError();
   }
   render() {
-    const { email, username, password } = this.state;
+    const { email, name, password } = this.state;
     const { error } = this.props.user;
     const { loading } = this.props.ui;
     return (
@@ -67,9 +67,9 @@ class Signup extends Component {
               type="text"
               placeholder="Username"
               className="form-control my-3"
-              name="username"
+              name="name"
               onChange={this.handleChange}
-              value={username}
+              value={name}
               required
             />
             <input

@@ -5,6 +5,7 @@ import {
   SET_POST,
   SET_LOADING,
   CLEAR_LOADING,
+  SET_USERPOSTS,
 } from "../types";
 // import firebase from "firebase/app";
 
@@ -159,4 +160,20 @@ export const likedPost = (postId, name) => (dispatch) => {
       }
     })
     .catch((err) => console.log(err));
+};
+
+export const getUserPosts = (uid) => (dispatch) => {
+  db.collection("posts")
+    .where("uid", "==", uid)
+    .get()
+    .then((querySnapshot) => {
+      let posts = [];
+      querySnapshot.forEach((doc) => {
+        posts.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      dispatch({ type: SET_USERPOSTS, payload: posts });
+    });
 };

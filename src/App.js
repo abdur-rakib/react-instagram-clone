@@ -21,6 +21,7 @@ class App extends Component {
         db.doc(`users/${userAuth.uid}`)
           .get()
           .then((doc) => {
+            // console.log(doc.data())
             store.dispatch({
               type: CREATE_USER,
               payload: {

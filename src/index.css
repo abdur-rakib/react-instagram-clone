@@ -65,3 +65,7 @@ progress[value]::-webkit-progress-bar {
 .nav-item {
   transition: all 0.5s !important;
 }
+.profile__image {
+  object-fit: contain;
+  max-width: 200px;
+}
