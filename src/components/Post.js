@@ -14,6 +14,10 @@ import { MdFiberManualRecord } from "react-icons/md";
 import moment from "moment";
 import CommentForm from "./CommentForm";
 import { Link } from "react-router-dom";
+
+import { BsThreeDotsVertical } from "react-icons/bs";
+
+import { DropdownButton, ButtonGroup, Dropdown } from "react-bootstrap";
 // import dayjs from "dayjs";
 
 class Post extends Component {
@@ -41,6 +45,7 @@ class Post extends Component {
       imageUrl,
       createdAt,
       likeCount,
+      uid,
     } = this.props.post;
     const { comments } = this.state;
     const renderComments =
@@ -69,14 +74,23 @@ class Post extends Component {
       <div className="post">
         {/* header {avater + username + location} */}
         <div className="post__header">
-          <img
-            className="avatar"
-            src="https://www.w3schools.com/howto/img_avatar.png"
-            alt="avatar"
-          />
-          <p className="mx-4">
-            <strong>{username}</strong>
-          </p>
+          <div className="d-flex align-items-center">
+            <img
+              className="avatar"
+              src="https://www.w3schools.com/howto/img_avatar.png"
+              alt="avatar"
+            />
+            <p className="mx-4">
+              <strong>{username}</strong>
+            </p>
+          </div>
+          {uid === this.props.user.uid ? (
+            // <BsThreeDotsVertical size={12} className="mr-4" />
+            <DropdownButton as={ButtonGroup} title="..">
+              <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+              <Dropdown.Item eventKey="2">Delete </Dropdown.Item>
+            </DropdownButton>
+          ) : null}
         </div>
         {/* image */}
         <img src={imageUrl} alt="" className="post__image" />

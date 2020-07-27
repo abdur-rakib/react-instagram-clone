@@ -1,7 +1,7 @@
 import React from "react";
 import "./SinglePost.css";
 import { connect } from "react-redux";
-import Header from '../Header'
+import Header from "../Header";
 import {
   getSinglePost,
   getComments,
@@ -17,6 +17,8 @@ import moment from "moment";
 import CommentForm from "../CommentForm";
 
 import { BeatLoader } from "react-spinners";
+
+import { DropdownButton, ButtonGroup, Dropdown } from "react-bootstrap";
 
 const SinglePost = (props) => {
   const [postId, setpostId] = useState(null);
@@ -48,20 +50,29 @@ const SinglePost = (props) => {
   const renderPost =
     props.post === null ? (
       <div className="col-md-12 mx-auto pt-5 mt-5 loading">
-          <BeatLoader size={50} color="#007BFF" />
-        </div>
+        <BeatLoader size={50} color="#007BFF" />
+      </div>
     ) : (
       <div className="post">
         {/* header {avater + username + location} */}
         <div className="post__header">
-          <img
-            className="avatar"
-            src="https://www.w3schools.com/howto/img_avatar.png"
-            alt="avatar"
-          />
-          <p className="mx-4">
-            <strong>{props.post.username}</strong>
-          </p>
+          <div className="d-flex align-items-center">
+            <img
+              className="avatar"
+              src="https://www.w3schools.com/howto/img_avatar.png"
+              alt="avatar"
+            />
+            <p className="mx-4">
+              <strong>{props.post.username}</strong>
+            </p>
+          </div>
+          {props.post.uid === props.user.uid ? (
+            // <BsThreeDotsVertical size={12} className="mr-4" />
+            <DropdownButton as={ButtonGroup} title="..">
+              <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+              <Dropdown.Item eventKey="2">Delete </Dropdown.Item>
+            </DropdownButton>
+          ) : null}
         </div>
         {/* image */}
         <img src={props.post.imageUrl} alt="" className="post__image" />
@@ -94,8 +105,8 @@ const SinglePost = (props) => {
 
   return (
     <>
-    <Header />
-    {renderPost}
+      <Header />
+      {renderPost}
     </>
   );
 };
@@ -104,6 +115,7 @@ const mapStateToProps = (state) => {
   return {
     data: state.data,
     post: state.data.post,
+    user: state.user,
   };
 };
 

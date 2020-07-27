@@ -69,3 +69,6 @@ progress[value]::-webkit-progress-bar {
   object-fit: contain;
   max-width: 200px;
 }
+.dropdown-menu {
+  min-width: 6.4rem !important;
+}
