@@ -1,6 +1,5 @@
 import React from "react";
 import Posts from "../components/Posts";
-// import User from "../components/User";
 import Header from "../components/Header";
 import ImageUpload from "../components/ImageUpload/ImageUpload";
 import InstagramEmbed from "react-instagram-embed";

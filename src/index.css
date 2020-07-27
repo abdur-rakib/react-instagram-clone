@@ -48,3 +48,20 @@ progress[value]::-webkit-progress-bar {
   left: 30%;
   margin-bottom: 1000px;
 }
+.active {
+  border-bottom: 3px solid orangered;
+}
+.nav-link {
+  border-bottom: 3px solid none;
+  font-size: 1.7rem !important;
+  cursor: pointer;
+}
+.modal-content {
+  top: -117px !important;
+  box-shadow: 3px 10px 41px #545b62;
+  border: 1px solid transparent !important;
+}
+
+.nav-item {
+  transition: all 0.5s !important;
+}

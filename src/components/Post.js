@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import "./Post.css";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { connect } from "react-redux";
-import { getComments } from "../redux/actions/dataActions";
+import {
+  getComments,
+  likePost,
+  unlikePost,
+  likedPost,
+} from "../redux/actions/dataActions";
 import { db } from "../firebase/utils";
 import { MdFiberManualRecord } from "react-icons/md";
 
@@ -26,11 +31,18 @@ class Post extends Component {
 
         this.setState({ comments: comments });
       });
+    // this.props.likedPost(this.props.post.id, this.props.user.displayName);
   }
   render() {
-    const { id, username, caption, imageUrl, createdAt } = this.props.post;
+    const {
+      id,
+      username,
+      caption,
+      imageUrl,
+      createdAt,
+      likeCount,
+    } = this.props.post;
     const { comments } = this.state;
-    // console.log(this.props.post.id, comments);
     const renderComments =
       comments.length === 0 ? (
         <p className="lead text-primary">No comments yet!</p>
@@ -45,7 +57,7 @@ class Post extends Component {
           ) : (
             <p></p>
           )}
-          {comments.map((comment, index) => (
+          {comments.slice(0, 3).map((comment, index) => (
             <p key={index} className="post__text">
               <strong>{comment.username} </strong>
               {comment.comment}
@@ -70,11 +82,16 @@ class Post extends Component {
         <img src={imageUrl} alt="" className="post__image" />
         <div className="post__footer">
           {/* love, comment, share button */}
-          <BsHeart size={32} className="icon" />
+          <BsHeart
+            style={{ cursor: "pointer" }}
+            size={32}
+            className="icon"
+            onClick={() => this.props.likePost(id, this.props.user.displayName)}
+          />
           <BsHeartFill size={32} className="icon" color="red" />
           {/* Number of likes */}
           <p>
-            <strong>8122 likes</strong>
+            <strong>{likeCount} likes</strong>
           </p>
           {/* Username + caption */}
           <p className="post__text mb-0">
@@ -99,11 +116,15 @@ class Post extends Component {
 const mapStateToProps = (state) => {
   return {
     data: state.data,
+    user: state.user,
   };
 };
 
 const mapActionsToProps = {
   getComments,
+  likePost,
+  unlikePost,
+  likedPost,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Post);

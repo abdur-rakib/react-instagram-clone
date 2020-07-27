@@ -30,7 +30,6 @@ class Signup extends Component {
     const { email, username, password } = this.state;
     const { error } = this.props.user;
     const { loading } = this.props.ui;
-    console.log(loading);
     return (
       <div className="row  d-flex flex-column">
         <div className="col-sm-5 mx-auto auth-form text-center mb-0">

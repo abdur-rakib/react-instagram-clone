@@ -1,9 +1,16 @@
-import { SET_POSTS, SET_COMMENTS, SET_POST } from "../types";
+import {
+  SET_POSTS,
+  SET_COMMENTS,
+  SET_POST,
+  SET_LIKED,
+  SET_UNLIKED,
+} from "../types";
 
 const initState = {
   posts: null,
   post: null,
   comments: [],
+  liked: false,
 };
 
 export default function (state = initState, action) {
@@ -23,6 +30,16 @@ export default function (state = initState, action) {
       return {
         ...state,
         comments: action.payload,
+      };
+    case SET_LIKED:
+      return {
+        ...state,
+        liked: true,
+      };
+    case SET_UNLIKED:
+      return {
+        ...state,
+        liked: true,
       };
     default:
       return state;

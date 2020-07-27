@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { storage, db } from "../../firebase/utils";
 // import firebase from "firebase/app";
 import { connect } from "react-redux";
+import store from "../../redux/store";
+import { SET_LOADING, CLEAR_LOADING } from "../../redux/types";
 
 const initState = {
   caption: "",
@@ -27,6 +29,7 @@ class ImageUpload extends Component {
   };
   handleSubmit = (e) => {
     e.preventDefault();
+    store.dispatch({ type: SET_LOADING });
     this.setState({ showProgressBar: true });
     const uploadTask = storage
       .ref(`images/${this.state.image.name}`)
@@ -53,17 +56,20 @@ class ImageUpload extends Component {
               createdAt: new Date().toISOString(),
               caption: this.state.caption,
               imageUrl: url,
-              username: this.props.user.displayName,
+              username: this.props.user.name,
+              likeCount: 0,
             });
           })
           .then(() => {
             this.setState(initState);
+            store.dispatch({ type: CLEAR_LOADING });
           });
       }
     );
   };
   render() {
-    // const { displayName } = this.props.user;
+    const { loading } = this.props.ui;
+    // console.log(loading);
     return (
       <div className="mt-3">
         <form
@@ -88,8 +94,12 @@ class ImageUpload extends Component {
             onChange={this.handleChange}
             required
           />
-          <button type="submit" className="btn btn-md btn-primary px-3">
-            Post
+          <button
+            disabled={loading}
+            type="submit"
+            className="btn btn-md btn-primary px-3"
+          >
+            {loading ? "Posting" : "Post"}
           </button>
         </form>
         {this.state.showProgressBar && (
@@ -116,6 +126,7 @@ class ImageUpload extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    ui: state.ui,
   };
 };
 

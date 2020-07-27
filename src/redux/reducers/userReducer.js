@@ -2,8 +2,11 @@ import { CREATE_USER, LOGOUT_USER, SET_ERROR, CLEAR_ERROR } from "../types";
 
 const initState = {
   authenticated: false,
-  email: "",
-  displayName: "",
+  name: "",
+  bio: "",
+  address: "",
+  website: "",
+  uid: "",
   error: "",
 };
 

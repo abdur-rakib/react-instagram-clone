@@ -6,19 +6,20 @@ import { Link } from "react-router-dom";
 import { logout } from "../redux/actions/userActions";
 
 const Header = (props) => {
-  const { authenticated, displayName } = props.user;
+  const { authenticated } = props.user;
   const renderProfile = authenticated ? (
     <div className="d-flex">
-      <Link to="/profile" title={displayName}>
+      <Link className="d-flex" to="/profile" title={props.user.name}>
         <img
           className="avatar profile"
           src="https://www.w3schools.com/howto/img_avatar.png"
           alt="avatar"
         />
+        <h4 className="mt-2 ml-2">{props.user.name}</h4>
       </Link>
-
       <Link to="/">
         <AiOutlineLogout
+          title="Logout"
           onClick={props.logout}
           size={32}
           className="text-danger ml-2"
@@ -28,7 +29,7 @@ const Header = (props) => {
   ) : null;
   return (
     <div className="app__header pl-md-4">
-      <div className="col-md-11 mx-auto d-flex justify-content-between">
+      <div className="col-md-10 col-12 mx-auto d-flex justify-content-between">
         <Link to="/">
           <img
             src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"

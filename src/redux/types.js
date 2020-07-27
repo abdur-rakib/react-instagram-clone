@@ -9,3 +9,5 @@ export const SET_COMMENTS = "SET_COMMENTS";
 // UI types
 export const SET_LOADING = "SET_LOADING";
 export const CLEAR_LOADING = "CLEAR_LOADING";
+export const SET_LIKED = "SET_LIKED";
+export const SET_UNLIKED = "SET_UNLIKED";

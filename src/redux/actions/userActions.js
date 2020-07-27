@@ -1,4 +1,4 @@
-import { auth } from "../../firebase/utils";
+import { auth, db } from "../../firebase/utils";
 import {
   CREATE_USER,
   LOGOUT_USER,
@@ -14,16 +14,22 @@ export const signUpWithEmailPassword = (newUserData) => (dispatch) => {
   auth
     .createUserWithEmailAndPassword(newUserData.email, newUserData.password)
     .then((res) => {
-      return res.user
-        .updateProfile({
-          displayName: newUserData.username,
+      db.doc(`users/${res.user.uid}`)
+        .set({
+          name: newUserData.username,
+          address: "",
+          bio: "",
+          website: "",
         })
         .then(() => {
           dispatch({
             type: CREATE_USER,
             payload: {
-              email: res.user.email,
-              displayName: res.user.displayName,
+              uid: res.user.uid,
+              name: newUserData.username,
+              address: "",
+              bio: "",
+              website: "",
             },
           });
           dispatch({ type: CLEAR_LOADING });
@@ -66,4 +72,38 @@ export const logout = () => (dispatch) => {
 
 export const clearError = () => (dispatch) => {
   dispatch({ type: CLEAR_ERROR });
+};
+
+export const editUserDetails = (newUserData, uid) => (dispatch) => {
+  dispatch({ type: SET_LOADING });
+  db.doc(`users/${uid}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        db.doc(`users/${uid}`)
+          .update({
+            name: newUserData.name,
+            website: newUserData.website,
+            address: newUserData.address,
+            bio: newUserData.bio,
+          })
+          .then(() => {
+            dispatch({
+              type: CREATE_USER,
+              payload: {
+                uid: uid,
+                name: newUserData.name,
+                website: newUserData.website,
+                address: newUserData.address,
+                bio: newUserData.bio,
+              },
+            });
+            dispatch({ type: CLEAR_LOADING });
+          });
+      }
+    })
+    .catch((err) => {
+      dispatch({ type: CLEAR_LOADING });
+      console.log(err);
+    });
 };
