@@ -1,6 +1,7 @@
 import React from "react";
 import "./SinglePost.css";
 import { connect } from "react-redux";
+import Header from '../Header'
 import {
   getSinglePost,
   getComments,
@@ -15,7 +16,7 @@ import { MdFiberManualRecord } from "react-icons/md";
 import moment from "moment";
 import CommentForm from "../CommentForm";
 
-import { ClockLoader } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 
 const SinglePost = (props) => {
   const [postId, setpostId] = useState(null);
@@ -23,12 +24,12 @@ const SinglePost = (props) => {
   useEffect(() => {
     const path = props.location.pathname.split("/");
     setpostId(path[path.length - 1]);
-    console.log(postId);
     if (postId) {
       props.getSinglePost(postId);
       props.getComments(postId);
     }
-  }, [postId, props]);
+    // eslint-disable-next-line
+  }, [postId]);
 
   //   const { username, caption, imageUrl, createdAt } = props.data.post;
   const { comments } = props.data;
@@ -46,9 +47,9 @@ const SinglePost = (props) => {
     );
   const renderPost =
     props.post === null ? (
-      <div className="col-md-12 mt-5 pt-5 mx-auto loading">
-        <ClockLoader size={150} color="orange" />
-      </div>
+      <div className="col-md-12 mx-auto pt-5 mt-5 loading">
+          <BeatLoader size={50} color="#007BFF" />
+        </div>
     ) : (
       <div className="post">
         {/* header {avater + username + location} */}
@@ -73,8 +74,8 @@ const SinglePost = (props) => {
             <strong>8122 likes</strong>
           </p>
           {/* Username + caption */}
-          <p className="post__text mb-0">
-            <MdFiberManualRecord color="orangered" className="mt-0 mb-1" />
+          <p className="post__text mb-3">
+            <MdFiberManualRecord color="orangered" className="mt-0" />
             <strong>{props.post.username}</strong> {props.post.caption}
           </p>
           {renderComments}
@@ -86,12 +87,17 @@ const SinglePost = (props) => {
         {/* comments */}
         <hr className="mt-4" />
         <div className="comments">
-          <CommentForm id={props.post.id} />
+          <CommentForm id={postId} />
         </div>
       </div>
     );
 
-  return renderPost;
+  return (
+    <>
+    <Header />
+    {renderPost}
+    </>
+  );
 };
 
 const mapStateToProps = (state) => {

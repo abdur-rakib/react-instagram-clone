@@ -12,7 +12,7 @@ const CommentForm = (props) => {
     e.preventDefault();
     props.postComment(props.id, {
       comment: comment,
-      username: props.user.displayName,
+      username: props.user.name,
     });
     setTimeout(() => {
       setComment("");
