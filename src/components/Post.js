@@ -6,7 +6,6 @@ import {
   getComments,
   likePost,
   unlikePost,
-  likedPost,
 } from "../redux/actions/dataActions";
 import { db } from "../firebase/utils";
 import { MdFiberManualRecord } from "react-icons/md";
@@ -15,14 +14,13 @@ import moment from "moment";
 import CommentForm from "./CommentForm";
 import { Link } from "react-router-dom";
 
-import { BsThreeDotsVertical } from "react-icons/bs";
-
 import { DropdownButton, ButtonGroup, Dropdown } from "react-bootstrap";
 // import dayjs from "dayjs";
 
 class Post extends Component {
   state = {
     comments: [],
+    liked: false,
   };
   componentDidMount() {
     db.collection("posts")
@@ -35,8 +33,33 @@ class Post extends Component {
 
         this.setState({ comments: comments });
       });
-    // this.props.likedPost(this.props.post.id, this.props.user.displayName);
+
+    db.doc(`posts/${this.props.post.id}`)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          db.collection("likes")
+            .where("name", "==", this.props.user.name)
+            .where("postId", "==", this.props.post.id)
+            .limit(1)
+            .get()
+            .then((data) => {
+              if (!data.empty) {
+                this.setState({ liked: true });
+              }
+            });
+        }
+      });
   }
+
+  like = () => {
+    this.props.likePost(this.props.post.id, this.props.user.name);
+    this.setState({ liked: true });
+  };
+  unlike = () => {
+    this.props.unlikePost(this.props.post.id, this.props.user.name);
+    this.setState({ liked: false });
+  };
   render() {
     const {
       id,
@@ -96,13 +119,24 @@ class Post extends Component {
         <img src={imageUrl} alt="" className="post__image" />
         <div className="post__footer">
           {/* love, comment, share button */}
-          <BsHeart
-            style={{ cursor: "pointer" }}
-            size={32}
-            className="icon"
-            onClick={() => this.props.likePost(id, this.props.user.displayName)}
-          />
-          <BsHeartFill size={32} className="icon" color="red" />
+          {this.state.liked ? (
+            <button
+              className="btn"
+              disabled={this.props.ui.loading}
+              onClick={this.unlike}
+            >
+              <BsHeartFill size={32} className="icon" color="red" />
+            </button>
+          ) : (
+            <button
+              className="btn"
+              disabled={this.props.ui.loading}
+              onClick={this.like}
+            >
+              <BsHeart size={32} className="icon" />
+            </button>
+          )}
+
           {/* Number of likes */}
           <p>
             <strong>{likeCount} likes</strong>
@@ -131,6 +165,7 @@ const mapStateToProps = (state) => {
   return {
     data: state.data,
     user: state.user,
+    ui: state.ui,
   };
 };
 
@@ -138,7 +173,6 @@ const mapActionsToProps = {
   getComments,
   likePost,
   unlikePost,
-  likedPost,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Post);

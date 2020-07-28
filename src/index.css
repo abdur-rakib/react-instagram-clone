@@ -72,3 +72,7 @@ progress[value]::-webkit-progress-bar {
 .dropdown-menu {
   min-width: 6.4rem !important;
 }
+
+.btn {
+  box-shadow: none !important;
+}

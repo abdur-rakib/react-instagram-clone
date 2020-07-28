@@ -68,34 +68,8 @@ export const getSinglePost = (id) => (dispatch) => {
   });
 };
 
-// export const likeUnlikePost = (postId, username) => (dispatch) => {
-//   db.doc(`posts/${postId}`)
-//     .get()
-//     .then((doc) => {
-//       if (doc.exists) {
-//         const liked = doc.data().likes.indexOf(username);
-//         console.log(liked);
-//         if (liked === -1) {
-//           db.doc(`/posts/${postId}`).update({
-//             likes: [...doc.data().likes, username],
-//           });
-//           console.log("added");
-//         } else {
-//           doc.data().likes = [1, 2, 3];
-//           console.log(doc.data().likes);
-//           db.doc(`/posts/${postId}`)
-//             .update({
-//               likes: ["a", "b", "c"],
-//             })
-//             .then(() => console.log("removed"))
-//             .catch((err) => console.log(err));
-//         }
-//       }
-//     })
-//     .catch((err) => console.log(err));
-// };
-
 export const likePost = (postId, name) => (dispatch) => {
+  dispatch({ type: SET_LOADING });
   db.doc(`posts/${postId}`)
     .get()
     .then((doc) => {
@@ -103,64 +77,63 @@ export const likePost = (postId, name) => (dispatch) => {
         const likeCount = doc.data().likeCount;
         db.collection("likes")
           .add({
+            name: name,
             postId: postId,
-            username: name,
           })
           .then(() => {
             db.doc(`posts/${postId}`).update({
               likeCount: likeCount + 1,
             });
+            dispatch({ type: CLEAR_LOADING });
           });
       }
     })
     .catch((err) => console.log(err));
 };
 export const unlikePost = (postId, name) => (dispatch) => {
+  dispatch({ type: SET_LOADING });
   db.doc(`posts/${postId}`)
     .get()
     .then((doc) => {
       if (doc.exists) {
         const likeCount = doc.data().likeCount;
         db.collection("likes")
-          .where("username", "==", name)
+          .where("name", "==", name)
           .where("postId", "==", postId)
-          .limit(1)
           .get()
-          .then((data) => {
-            db.doc(`/likes/${data.docs[0].id}`)
-              .delete()
-              .then(() => {
-                db.doc(`posts/${postId}`).update({
-                  likeCount: likeCount - 1,
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              db.doc(`/likes/${doc.id}`)
+                .delete()
+                .then(() => {
+                  db.doc(`posts/${postId}`).update({
+                    likeCount: likeCount - 1,
+                  });
+                  dispatch({ type: CLEAR_LOADING });
                 });
-              });
+            });
           });
       }
     })
     .catch((err) => console.log(err));
 };
 
-export const likedPost = (postId, name) => (dispatch) => {
-  db.doc(`posts/${postId}`)
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        db.collection("likes")
-          .where("username", "==", name)
-          .where("postId", "==", postId)
-          .limit(1)
-          .get()
-          .then((data) => {
-            if (data.empty) {
-              return false;
-            } else {
-              return true;
-            }
-          });
-      }
-    })
-    .catch((err) => console.log(err));
-};
+// export const likedPost = (postId, name) => (dispatch) => {
+//   db.doc(`posts/${postId}`)
+//     .get()
+//     .then((doc) => {
+//       if (doc.exists) {
+//         db.collection("likes")
+//           .where("name", "==", name)
+//           .where("postId", "==", postId)
+//           .limit(1)
+//           .get()
+//           .then((data) => {
+//             return data;
+//           });
+//       }
+//     });
+// };
 
 export const getUserPosts = (uid) => (dispatch) => {
   db.collection("posts")
@@ -168,6 +141,7 @@ export const getUserPosts = (uid) => (dispatch) => {
     .get()
     .then((querySnapshot) => {
       let posts = [];
+      // console.log(querySnapshot);
       querySnapshot.forEach((doc) => {
         posts.push({
           id: doc.id,
