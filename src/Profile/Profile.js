@@ -6,7 +6,7 @@ import { FcInfo, FcAddressBook } from "react-icons/fc";
 import { FiExternalLink } from "react-icons/fi";
 import { Modal } from "react-bootstrap";
 import { editUserDetails } from "../redux/actions/userActions";
-import { getUserPosts } from "../redux/actions/dataActions";
+import { getUserPosts, getUserLikedPosts } from "../redux/actions/dataActions";
 import { BeatLoader } from "react-spinners";
 import Post from "../components/Post";
 
@@ -46,27 +46,8 @@ class Profile extends Component {
 
   componentDidMount() {
     this.props.getUserPosts(this.props.user.uid);
+    this.props.getUserLikedPosts(this.props.user.name);
     this.mapUserDetailsToState(this.props.user);
-
-    // auth.onAuthStateChanged((userAuth) => {
-    //   if (userAuth) {
-    //     db.doc(`users/${userAuth.uid}`)
-    //       .get()
-    //       .then((doc) => {
-    //         // console.log(doc.data())
-    //         store.dispatch({
-    //           type: CREATE_USER,
-    //           payload: {
-    //             uid: userAuth.uid,
-    //             name: doc.data().name,
-    //             bio: doc.data().bio,
-    //             address: doc.data().address,
-    //             website: doc.data().website,
-    //           },
-    //         });
-    //       });
-    //   }
-    // });
   }
   mapUserDetailsToState = (user) => {
     this.setState({
@@ -79,6 +60,7 @@ class Profile extends Component {
   render() {
     const { loading } = this.props.ui;
     const { userPosts } = this.props.data;
+    const { userLikedPosts } = this.props.data;
     const renderPosts =
       userPosts === null ? (
         <div className="col-md-12 mx-auto pt-5 mt-5 loading">
@@ -89,15 +71,27 @@ class Profile extends Component {
       ) : (
         userPosts.map((post) => <Post key={post.id} post={post} />)
       );
+    const renderLikedPosts =
+      userLikedPosts === null ? (
+        <div className="col-md-12 mx-auto pt-5 mt-5 loading">
+          <BeatLoader size={50} color="#007BFF" />
+        </div>
+      ) : userLikedPosts.length === 0 ? (
+        <h1 className="display-5 mt-4 mb-2 text-center">No posts yet !!!</h1>
+      ) : (
+        userLikedPosts.map((post) => <Post key={post.id} post={post} />)
+      );
     let renderCategory;
     if (this.state.category === "yourPosts") {
       renderCategory = <div className="col-md-10 mx-auto">{renderPosts}</div>;
     }
     if (this.state.category === "yourSavedPosts") {
-      renderCategory = <h1>Your Saved Posts</h1>;
+      renderCategory = <div className="col-md-10 mx-auto">Saved Posts</div>;
     }
     if (this.state.category === "yourLikedPosts") {
-      renderCategory = <h1>Your Liked Posts</h1>;
+      renderCategory = (
+        <div className="col-md-10 mx-auto">{renderLikedPosts}</div>
+      );
     }
 
     return (
@@ -296,6 +290,7 @@ const mapStateToProps = (state) => {
 const mapActionsToProps = {
   editUserDetails,
   getUserPosts,
+  getUserLikedPosts,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Profile);

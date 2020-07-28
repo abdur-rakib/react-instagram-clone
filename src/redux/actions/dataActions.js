@@ -6,6 +6,7 @@ import {
   SET_LOADING,
   CLEAR_LOADING,
   SET_USERPOSTS,
+  SET_USERLIKEDPOSTS,
 } from "../types";
 // import firebase from "firebase/app";
 
@@ -118,23 +119,6 @@ export const unlikePost = (postId, name) => (dispatch) => {
     .catch((err) => console.log(err));
 };
 
-// export const likedPost = (postId, name) => (dispatch) => {
-//   db.doc(`posts/${postId}`)
-//     .get()
-//     .then((doc) => {
-//       if (doc.exists) {
-//         db.collection("likes")
-//           .where("name", "==", name)
-//           .where("postId", "==", postId)
-//           .limit(1)
-//           .get()
-//           .then((data) => {
-//             return data;
-//           });
-//       }
-//     });
-// };
-
 export const getUserPosts = (uid) => (dispatch) => {
   db.collection("posts")
     .where("uid", "==", uid)
@@ -149,5 +133,44 @@ export const getUserPosts = (uid) => (dispatch) => {
         });
       });
       dispatch({ type: SET_USERPOSTS, payload: posts });
+    });
+};
+// export const getUserLikedPosts = (name) => (dispatch) => {
+//   db.collection("likes")
+//     .where("name", "==", name)
+//     .get()
+//     .then((querySnapshot) => {
+//       let posts = [];
+//       // console.log(querySnapshot);
+//       querySnapshot.forEach((doc) => {
+//         db.doc(`posts/${doc.data().postId}`)
+//           .get()
+//           .then((doc) => {
+//             posts.push({
+//               id: doc.id,
+//               ...doc.data(),
+//             });
+//           });
+//       });
+//       dispatch({ type: SET_USERLIKEDPOSTS, payload: posts });
+//     });
+// };
+export const getUserLikedPosts = (name) => (dispatch) => {
+  db.collection("likes")
+    .where("name", "==", name)
+    .onSnapshot((snapshot) => {
+      let posts = [];
+      // eslint-disable-next-line
+      snapshot.docs.map((doc) => {
+        db.doc(`posts/${doc.data().postId}`)
+          .get()
+          .then((doc) => {
+            posts.push({
+              id: doc.id,
+              ...doc.data(),
+            });
+          });
+      });
+      dispatch({ type: SET_USERLIKEDPOSTS, payload: posts });
     });
 };
